@@ -4,31 +4,55 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LogIn } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LoginFormProps {
   onLogin: (success: boolean) => void;
 }
 
 const LoginForm = ({ onLogin }: LoginFormProps) => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simple mock authentication (replace with actual authentication)
-    setTimeout(() => {
-      if (username === "admin" && password === "password") {
-        toast.success("Login successful!");
-        onLogin(true);
-      } else {
-        toast.error("Invalid credentials");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) {
+        toast.error(error.message);
         onLogin(false);
+        return;
       }
+
+      // Check if user is admin
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .single();
+
+      if (roleError || roleData?.role !== 'admin') {
+        toast.error("Unauthorized access");
+        await supabase.auth.signOut();
+        onLogin(false);
+        return;
+      }
+
+      toast.success("Login successful!");
+      onLogin(true);
+    } catch (error) {
+      toast.error("An error occurred");
+      onLogin(false);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -43,15 +67,15 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
-          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
-            Username
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            Email
           </label>
           <Input
-            id="username"
-            type="text"
-            placeholder="Enter username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -77,13 +101,6 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
         >
           {isLoading ? "Signing In..." : "Sign In"}
         </Button>
-
-        <div className="text-center mt-4">
-          <p className="text-xs text-gray-500">
-            <span className="block font-medium mb-1">Demo Credentials</span>
-            Username: admin | Password: password
-          </p>
-        </div>
       </form>
     </div>
   );
