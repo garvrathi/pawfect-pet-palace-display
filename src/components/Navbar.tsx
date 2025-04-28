@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Paw, ShoppingCart } from "lucide-react";
+import { Menu, X, Bird, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -13,7 +12,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
-              <Paw className="h-8 w-8 text-petcare-purple mr-2 animate-bounce-slow" />
+              <Bird className="h-8 w-8 text-petcare-purple mr-2 animate-bounce-slow" />
               <span className="font-display text-xl font-bold bg-gradient-to-r from-petcare-purple to-petcare-pink bg-clip-text text-transparent">
                 Petcare4sure
               </span>
