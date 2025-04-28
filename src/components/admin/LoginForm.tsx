@@ -36,7 +36,7 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
         .from('user_roles')
         .select('role')
         .eq('user_id', data.user.id)
-        .single();
+        .maybeSingle();
 
       if (roleError || roleData?.role !== 'admin') {
         toast.error("Unauthorized access");
