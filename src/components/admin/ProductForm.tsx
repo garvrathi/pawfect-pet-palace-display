@@ -1,9 +1,14 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { Product } from "../ProductCard";
 
@@ -17,28 +22,28 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
   const [name, setName] = useState(product?.name || "");
   const [description, setDescription] = useState(product?.description || "");
   const [price, setPrice] = useState(product?.price.toString() || "");
-  const [imageUrl, setImageUrl] = useState(product?.imageUrl || "");
+  const [image_url, setimage_url] = useState(product?.image_url || "");
   const [category, setCategory] = useState(product?.category || "");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!name || !description || !price || !imageUrl || !category) {
+
+    if (!name || !description || !price || !image_url || !category) {
       toast.error("Please fill in all fields");
       return;
     }
-    
+
     const priceValue = parseFloat(price);
     if (isNaN(priceValue) || priceValue <= 0) {
       toast.error("Please enter a valid price");
       return;
     }
-    
+
     onSubmit({
       name,
       description,
       price: priceValue,
-      imageUrl,
+      image_url,
       category,
     });
   };
@@ -57,7 +62,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           required
         />
       </div>
-      
+
       <div className="space-y-2">
         <label htmlFor="description" className="block text-sm font-medium">
           Description
@@ -71,7 +76,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           required
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="price" className="block text-sm font-medium">
@@ -88,7 +93,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
             required
           />
         </div>
-        
+
         <div className="space-y-2">
           <label htmlFor="category" className="block text-sm font-medium">
             Category
@@ -110,20 +115,20 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
           </Select>
         </div>
       </div>
-      
+
       <div className="space-y-2">
-        <label htmlFor="imageUrl" className="block text-sm font-medium">
+        <label htmlFor="image_url" className="block text-sm font-medium">
           Image URL
         </label>
         <Input
-          id="imageUrl"
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
+          id="image_url"
+          value={image_url}
+          onChange={(e) => setimage_url(e.target.value)}
           placeholder="Enter image URL"
           required
         />
       </div>
-      
+
       <div className="pt-4 flex justify-end space-x-2">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel

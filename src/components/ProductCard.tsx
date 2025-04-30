@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail } from "lucide-react";
@@ -8,8 +7,9 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  imageUrl: string;
+  image_url: string;
   category: string;
+  created_at?: string;
 }
 
 interface ProductCardProps {
@@ -21,7 +21,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="pet-card group">
       <div className="relative overflow-hidden h-56">
         <img
-          src={product.imageUrl}
+          src={product.image_url}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
@@ -30,15 +30,22 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="p-4">
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-lg">{product.name}</h3>
-          <span className="text-petcare-purple font-semibold">${product.price.toFixed(2)}</span>
+          <span className="text-petcare-purple font-semibold">
+            ${product.price.toFixed(2)}
+          </span>
         </div>
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-        
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          {product.description}
+        </p>
+
         <div className="flex flex-col space-y-2">
           <Button className="pet-button w-full">
             <Phone className="w-4 h-4 mr-2" /> Call to Order
           </Button>
-          <Button variant="outline" className="rounded-full border-petcare-purple/30 text-petcare-purple hover:bg-petcare-purple/10 w-full">
+          <Button
+            variant="outline"
+            className="rounded-full border-petcare-purple/30 text-petcare-purple hover:bg-petcare-purple/10 w-full"
+          >
             <Mail className="w-4 h-4 mr-2" /> Email Inquiry
           </Button>
         </div>

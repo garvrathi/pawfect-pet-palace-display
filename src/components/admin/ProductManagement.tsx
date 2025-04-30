@@ -1,17 +1,16 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Product } from "../ProductCard";
 import ProductForm from "./ProductForm";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -24,79 +23,108 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { supabase } from "@/integrations/supabase/client";
 
 const ProductManagement = () => {
-  // Mock initial products data
-  const initialProducts = [
-    {
-      id: 1,
-      name: "Premium Dog Food",
-      description: "High-quality nutritious dog food for all breeds with added vitamins and minerals.",
-      price: 29.99,
-      imageUrl: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?q=80&w=500&auto=format&fit=crop",
-      category: "food"
-    },
-    {
-      id: 2,
-      name: "Cat Tree House",
-      description: "Multi-level cat tree with scratching posts, hammock and cozy hideaway spots.",
-      price: 89.99,
-      imageUrl: "https://images.unsplash.com/photo-1591871937573-74dbce261b62?q=80&w=500&auto=format&fit=crop",
-      category: "accessories"
-    },
-    {
-      id: 3,
-      name: "Interactive Dog Toy",
-      description: "Mentally stimulating toy that dispenses treats as your dog plays.",
-      price: 19.99,
-      imageUrl: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=500&auto=format&fit=crop",
-      category: "toys"
-    },
-    {
-      id: 4,
-      name: "Pet Grooming Kit",
-      description: "Complete set of grooming tools for dogs and cats including brushes, clippers, and combs.",
-      price: 34.99,
-      imageUrl: "https://images.unsplash.com/photo-1635499829675-3282b954c3e8?q=80&w=500&auto=format&fit=crop",
-      category: "health"
-    },
-  ];
-
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [productToEdit, setProductToEdit] = useState<Product | null>(null);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState<number | null>(null);
 
-  const handleAddProduct = (productData: Omit<Product, "id">) => {
-    const newProduct = {
-      ...productData,
-      id: Math.max(0, ...products.map((p) => p.id)) + 1
-    };
-    
-    setProducts([...products, newProduct]);
-    toast.success("Product added successfully");
-    setIsAddDialogOpen(false);
+  // Fetch products from Supabase
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      toast.error("Failed to load products. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleEditProduct = (productData: Omit<Product, "id">) => {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleAddProduct = async (productData: Omit<Product, "id">) => {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .insert(productData)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setProducts([data, ...products]);
+      toast.success("Product added successfully");
+      setIsAddDialogOpen(false);
+    } catch (error) {
+      console.error("Error adding product:", error);
+      toast.error("Failed to add product. Please try again.");
+    }
+  };
+
+  const handleEditProduct = async (productData: Omit<Product, "id">) => {
     if (!productToEdit) return;
-    
-    const updatedProducts = products.map((product) =>
-      product.id === productToEdit.id
-        ? { ...productData, id: product.id }
-        : product
-    );
-    
-    setProducts(updatedProducts);
-    toast.success("Product updated successfully");
-    setProductToEdit(null);
-    setIsEditDialogOpen(false);
+
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .update(productData)
+        .eq("id", productToEdit.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setProducts(
+        products.map((product) =>
+          product.id === productToEdit.id ? data : product,
+        ),
+      );
+      toast.success("Product updated successfully");
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      console.error("Error updating product:", error);
+      toast.error("Failed to update product. Please try again.");
+    }
   };
 
-  const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter((product) => product.id !== id));
-    toast.success("Product deleted successfully");
+  const handleDeleteProduct = async (id: number) => {
+    setIsDeleting(id);
+    try {
+      const { error } = await supabase.from("products").delete().eq("id", id);
+
+      if (error) throw error;
+
+      setProducts(products.filter((product) => product.id !== id));
+      toast.success("Product deleted successfully");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast.error("Failed to delete product. Please try again.");
+    } finally {
+      setIsDeleting(null);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p>Loading products...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm">
@@ -112,9 +140,9 @@ const ProductManagement = () => {
             <DialogHeader>
               <DialogTitle>Add New Product</DialogTitle>
             </DialogHeader>
-            <ProductForm 
-              onSubmit={handleAddProduct} 
-              onCancel={() => setIsAddDialogOpen(false)} 
+            <ProductForm
+              onSubmit={handleAddProduct}
+              onCancel={() => setIsAddDialogOpen(false)}
             />
           </DialogContent>
         </Dialog>
@@ -128,7 +156,7 @@ const ProductManagement = () => {
           <TabsTrigger value="accessories">Accessories</TabsTrigger>
           <TabsTrigger value="health">Health & Care</TabsTrigger>
         </TabsList>
-        
+
         {["all", "food", "toys", "accessories", "health"].map((category) => (
           <TabsContent key={category} value={category} className="mt-0">
             <div className="overflow-x-auto">
@@ -145,51 +173,62 @@ const ProductManagement = () => {
                 </thead>
                 <tbody>
                   {products
-                    .filter((product) => category === "all" || product.category === category)
+                    .filter(
+                      (product) =>
+                        category === "all" || product.category === category,
+                    )
                     .map((product) => (
-                      <tr key={product.id} className="bg-white border-b hover:bg-gray-50">
+                      <tr
+                        key={product.id}
+                        className="bg-white border-b hover:bg-gray-50"
+                      >
                         <td className="px-4 py-3">{product.id}</td>
                         <td className="px-4 py-3">
-                          <img 
-                            src={product.imageUrl} 
-                            alt={product.name} 
+                          <img
+                            src={product.image_url}
+                            alt={product.name}
                             className="w-12 h-12 rounded-md object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src =
+                                "/placeholder-product.png";
+                            }}
                           />
                         </td>
-                        <td className="px-4 py-3 font-medium">{product.name}</td>
-                        <td className="px-4 py-3 capitalize">{product.category}</td>
-                        <td className="px-4 py-3">${product.price.toFixed(2)}</td>
+                        <td className="px-4 py-3 font-medium">
+                          {product.name}
+                        </td>
+                        <td className="px-4 py-3 capitalize">
+                          {product.category}
+                        </td>
+                        <td className="px-4 py-3">
+                          ${product.price.toFixed(2)}
+                        </td>
                         <td className="px-4 py-3 flex gap-2">
-                          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                          <Dialog
+                            open={isEditDialogOpen}
+                            onOpenChange={setIsEditDialogOpen}
+                          >
                             <DialogTrigger asChild>
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => {
-                                  setProductToEdit(product);
-                                  setIsEditDialogOpen(true);
-                                }}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setProductToEdit(product)}
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
                             </DialogTrigger>
-                            {productToEdit && productToEdit.id === product.id && (
-                              <DialogContent className="sm:max-w-lg">
-                                <DialogHeader>
-                                  <DialogTitle>Edit Product</DialogTitle>
-                                </DialogHeader>
-                                <ProductForm 
-                                  product={productToEdit}
-                                  onSubmit={handleEditProduct} 
-                                  onCancel={() => {
-                                    setProductToEdit(null);
-                                    setIsEditDialogOpen(false);
-                                  }}
-                                />
-                              </DialogContent>
-                            )}
+                            <DialogContent className="sm:max-w-lg">
+                              <DialogHeader>
+                                <DialogTitle>Edit Product</DialogTitle>
+                              </DialogHeader>
+                              <ProductForm
+                                product={productToEdit}
+                                onSubmit={handleEditProduct}
+                                onCancel={() => setIsEditDialogOpen(false)}
+                              />
+                            </DialogContent>
                           </Dialog>
-                          
+
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button variant="destructive" size="sm">
@@ -198,18 +237,26 @@ const ProductManagement = () => {
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                               <AlertDialogHeader>
-                                <AlertDialogTitle>Delete Product</AlertDialogTitle>
+                                <AlertDialogTitle>
+                                  Delete Product
+                                </AlertDialogTitle>
                                 <AlertDialogDescription>
-                                  Are you sure you want to delete "{product.name}"? This action cannot be undone.
+                                  Are you sure you want to delete "
+                                  {product.name}"? This action cannot be undone.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction 
-                                  onClick={() => handleDeleteProduct(product.id)}
+                                <AlertDialogAction
+                                  onClick={() =>
+                                    handleDeleteProduct(product.id)
+                                  }
                                   className="bg-red-500 hover:bg-red-600"
+                                  disabled={isDeleting === product.id}
                                 >
-                                  Delete
+                                  {isDeleting === product.id
+                                    ? "Deleting..."
+                                    : "Delete"}
                                 </AlertDialogAction>
                               </AlertDialogFooter>
                             </AlertDialogContent>
@@ -219,10 +266,15 @@ const ProductManagement = () => {
                     ))}
                 </tbody>
               </table>
-              
-              {products.filter((product) => category === "all" || product.category === category).length === 0 && (
+
+              {products.filter(
+                (product) =>
+                  category === "all" || product.category === category,
+              ).length === 0 && (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">No products found in this category</p>
+                  <p className="text-gray-500">
+                    No products found in this category
+                  </p>
                 </div>
               )}
             </div>

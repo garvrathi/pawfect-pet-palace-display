@@ -1,10 +1,8 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import Categories from "@/components/Categories";
-import Newsletter from "@/components/Newsletter";
 
 const Index = () => {
   return (
@@ -16,7 +14,6 @@ const Index = () => {
           <FeaturedProducts />
         </div>
         <Categories />
-        <Newsletter />
       </main>
       <Footer />
     </div>

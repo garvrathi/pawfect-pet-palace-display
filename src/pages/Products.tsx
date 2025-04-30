@@ -1,92 +1,104 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Newsletter from "@/components/Newsletter";
+
 import ProductCard, { Product } from "@/components/ProductCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
-  // Mock products data
-  const allProducts = [
-    {
-      id: 1,
-      name: "Premium Dog Food",
-      description: "High-quality nutritious dog food for all breeds with added vitamins and minerals.",
-      price: 29.99,
-      imageUrl: "https://images.unsplash.com/photo-1589924691995-400dc9ecc119?q=80&w=500&auto=format&fit=crop",
-      category: "food"
-    },
-    {
-      id: 2,
-      name: "Cat Tree House",
-      description: "Multi-level cat tree with scratching posts, hammock and cozy hideaway spots.",
-      price: 89.99,
-      imageUrl: "https://images.unsplash.com/photo-1591871937573-74dbce261b62?q=80&w=500&auto=format&fit=crop",
-      category: "accessories"
-    },
-    {
-      id: 3,
-      name: "Interactive Dog Toy",
-      description: "Mentally stimulating toy that dispenses treats as your dog plays.",
-      price: 19.99,
-      imageUrl: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?q=80&w=500&auto=format&fit=crop",
-      category: "toys"
-    },
-    {
-      id: 4,
-      name: "Pet Grooming Kit",
-      description: "Complete set of grooming tools for dogs and cats including brushes, clippers, and combs.",
-      price: 34.99,
-      imageUrl: "https://images.unsplash.com/photo-1635499829675-3282b954c3e8?q=80&w=500&auto=format&fit=crop",
-      category: "health"
-    },
-    {
-      id: 5,
-      name: "Cat Litter Box",
-      description: "Enclosed litter box with odor-control system and easy-clean features.",
-      price: 49.99,
-      imageUrl: "https://images.unsplash.com/photo-1613243555988-441166d4d6fd?q=80&w=500&auto=format&fit=crop",
-      category: "accessories"
-    },
-    {
-      id: 6,
-      name: "Premium Cat Food",
-      description: "Balanced nutrition for cats with high protein content and added taurine.",
-      price: 24.99,
-      imageUrl: "https://images.unsplash.com/photo-1599745422161-39de9addfb56?q=80&w=500&auto=format&fit=crop",
-      category: "food"
-    },
-    {
-      id: 7,
-      name: "Dog Collar",
-      description: "Durable and adjustable collar with reflective strips for night safety.",
-      price: 14.99,
-      imageUrl: "https://images.unsplash.com/photo-1603189406860-6405908018da?q=80&w=500&auto=format&fit=crop",
-      category: "accessories"
-    },
-    {
-      id: 8,
-      name: "Pet Multivitamins",
-      description: "Complete daily vitamin supplement for pets' overall health and immune system support.",
-      price: 19.99,
-      imageUrl: "https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?q=80&w=500&auto=format&fit=crop",
-      category: "health"
-    },
-  ];
-
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error } = await supabase.from("products").select("*");
+
+        if (error) throw error;
+
+        // Map Supabase data to match your Product interface
+        const formattedProducts =
+          data?.map((product) => ({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            imageUrl: product.image_url, // Map from image_url to imageUrl
+            category: product.category,
+          })) || [];
+
+        setProducts(formattedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   // Filter products based on search term and category
-  const filteredProducts = allProducts.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "all" || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow">
+          <div className="bg-gradient-to-r from-petcare-purple/10 to-petcare-pink/10 py-12">
+            <div className="section-container">
+              <h1 className="text-4xl font-bold mb-4">Our Products</h1>
+              <p className="text-gray-600 max-w-2xl">
+                Browse our selection of high-quality pet products...
+              </p>
+            </div>
+          </div>
+
+          <div className="section-container py-8">
+            <div className="flex flex-col md:flex-row gap-4 mb-8">
+              {/* Search skeleton */}
+              <div className="relative flex-grow h-10 bg-gray-100 rounded-md animate-pulse"></div>
+              {/* Category filter skeletons */}
+              <div className="flex gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-10 w-16 bg-gray-100 rounded-md animate-pulse"
+                  ></div>
+                ))}
+              </div>
+            </div>
+
+            {/* Products grid skeleton */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-gray-100 rounded-lg h-80 animate-pulse"
+                ></div>
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -96,13 +108,14 @@ const Products = () => {
           <div className="section-container">
             <h1 className="text-4xl font-bold mb-4">Our Products</h1>
             <p className="text-gray-600 max-w-2xl">
-              Browse our selection of high-quality pet products designed to keep your furry friends happy, healthy, and comfortable.
+              Browse our selection of high-quality pet products designed to keep
+              your furry friends happy, healthy, and comfortable.
             </p>
           </div>
         </div>
-        
+
         <div className="section-container py-8">
-          {/* Search and filters */}
+          {/* Search and filters - unchanged CSS */}
           <div className="flex flex-col md:flex-row gap-4 mb-8">
             <div className="relative flex-grow">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
@@ -137,8 +150,12 @@ const Products = () => {
                 Toys
               </Button>
               <Button
-                variant={selectedCategory === "accessories" ? "default" : "outline"}
-                className={selectedCategory === "accessories" ? "pet-button" : ""}
+                variant={
+                  selectedCategory === "accessories" ? "default" : "outline"
+                }
+                className={
+                  selectedCategory === "accessories" ? "pet-button" : ""
+                }
                 onClick={() => setSelectedCategory("accessories")}
               >
                 Accessories
@@ -152,8 +169,8 @@ const Products = () => {
               </Button>
             </div>
           </div>
-          
-          {/* Products grid */}
+
+          {/* Products grid - unchanged CSS */}
           {filteredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredProducts.map((product) => (
@@ -163,12 +180,12 @@ const Products = () => {
           ) : (
             <div className="text-center py-16">
               <p className="text-xl text-gray-500 mb-3">No products found</p>
-              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+              <p className="text-gray-500">
+                Try adjusting your search or filter criteria
+              </p>
             </div>
           )}
         </div>
-
-        <Newsletter />
       </main>
       <Footer />
     </div>
