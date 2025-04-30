@@ -1,35 +1,8 @@
-import { useState } from "react";
+import { Phone, Mail, Instagram } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { toast } from "sonner";
 
 const Contact = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!name || !email || !message) {
-      toast.error("Please fill in all required fields");
-      return;
-    }
-
-    toast.success("Thank you for your message! We'll get back to you soon.");
-
-    // Reset form
-    setName("");
-    setEmail("");
-    setSubject("");
-    setMessage("");
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -48,141 +21,59 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Contact Info + Form */}
+        {/* Contact Information */}
         <div className="section-container py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Contact Information */}
-            <div>
-              <h2 className="text-2xl font-bold mb-6">Get In Touch</h2>
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-2xl font-bold mb-8 text-center">
+              Get In Touch
+            </h2>
 
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-petcare-purple/10 rounded-full p-3">
-                    <Phone className="h-6 w-6 text-petcare-purple" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold">Phone</h3>
-                    <p className="text-gray-600 mt-1">+91 8287718294</p>
-                    <p className="text-gray-600 mt-1">+91 8700650039</p>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Phone */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-petcare-purple/10 rounded-full p-3 w-fit mx-auto mb-4">
+                  <Phone className="h-6 w-6 text-petcare-purple" />
                 </div>
-                {/* Instagram Contact - Added this new section */}
-                <div className="flex items-start space-x-4">
-                  <div className="bg-petcare-purple/10 rounded-full p-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="h-6 w-6 text-petcare-purple"
-                    >
-                      <rect
-                        x="2"
-                        y="2"
-                        width="20"
-                        height="20"
-                        rx="5"
-                        ry="5"
-                      ></rect>
-                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-bold">Instagram</h3>
-                    <p className="text-gray-600 mt-1">@petcare4sure</p>
-                    <a
-                      href="https://www.instagram.com/petcare4sure26/profilecard/?igsh=MTRwYzI3a3ZqZmNreg=="
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-petcare-purple hover:underline mt-1 inline-block"
-                    >
-                      Visit our profile
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-petcare-purple/10 rounded-full p-3">
-                    <Mail className="h-6 w-6 text-petcare-purple" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold">Email</h3>
-                    <p className="text-gray-600 mt-1">info@petcare4sure.com</p>
-                  </div>
+                <h3 className="font-bold text-lg text-center mb-2">Call Us</h3>
+                <div className="text-center space-y-1">
+                  <p className="text-gray-600">+91 8287718294</p>
+                  <p className="text-gray-600">+91 8700650039</p>
                 </div>
               </div>
-            </div>
 
-            {/* Contact Form */}
-            <div className="bg-white p-8 rounded-2xl shadow-md">
-              <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium">
-                    Your Name <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your name"
-                  />
+              {/* Email */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-petcare-purple/10 rounded-full p-3 w-fit mx-auto mb-4">
+                  <Mail className="h-6 w-6 text-petcare-purple" />
                 </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium">
-                    Your Email <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium"
+                <h3 className="font-bold text-lg text-center mb-2">Email Us</h3>
+                <div className="text-center">
+                  <a
+                    href="mailto:info@petcare4sure.com"
+                    className="text-petcare-purple hover:underline break-all px-2 inline-block"
                   >
-                    Subject
-                  </label>
-                  <Input
-                    id="subject"
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    placeholder="What's this regarding?"
-                  />
+                    info@petcare4sure.com
+                  </a>
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium"
+              {/* Instagram */}
+              <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                <div className="bg-petcare-purple/10 rounded-full p-3 w-fit mx-auto mb-4">
+                  <Instagram className="h-6 w-6 text-petcare-purple" />
+                </div>
+                <h3 className="font-bold text-lg text-center mb-2">DM Us</h3>
+                <div className="text-center">
+                  <a
+                    href="https://www.instagram.com/petcare4sure26/profilecard/?igsh=MTRwYzI3a3ZqZmNreg=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-petcare-purple hover:underline"
                   >
-                    Message <span className="text-red-500">*</span>
-                  </label>
-                  <Textarea
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="How can we help you?"
-                    rows={5}
-                  />
+                    @petcare4sure
+                  </a>
                 </div>
-
-                <Button type="submit" className="pet-button w-full">
-                  Send Message
-                </Button>
-              </form>
+              </div>
             </div>
           </div>
         </div>
