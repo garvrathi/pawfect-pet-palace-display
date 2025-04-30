@@ -201,7 +201,7 @@ const ProductManagement = () => {
                           {product.category}
                         </td>
                         <td className="px-4 py-3">
-                          ${product.price.toFixed(2)}
+                          Rs. {product.price.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 flex gap-2">
                           <Dialog

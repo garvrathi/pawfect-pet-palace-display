@@ -17,6 +17,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  console.log("Product image URL:", product.image_url);
   return (
     <div className="pet-card group">
       <div className="relative overflow-hidden h-56">
@@ -24,6 +25,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
           src={product.image_url}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/placeholder-product.png";
+            (e.target as HTMLImageElement).classList.remove(
+              "group-hover:scale-110",
+            );
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
@@ -31,7 +38,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-lg">{product.name}</h3>
           <span className="text-petcare-purple font-semibold">
-            ${product.price.toFixed(2)}
+            Rs. {product.price.toFixed(2)}
           </span>
         </div>
         <p className="text-gray-600 text-sm mb-4 line-clamp-2">
@@ -39,15 +46,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </p>
 
         <div className="flex flex-col space-y-2">
-          <Button className="pet-button w-full">
-            <Phone className="w-4 h-4 mr-2" /> Call to Order
-          </Button>
-          <Button
-            variant="outline"
-            className="rounded-full border-petcare-purple/30 text-petcare-purple hover:bg-petcare-purple/10 w-full"
-          >
-            <Mail className="w-4 h-4 mr-2" /> Email Inquiry
-          </Button>
+          <a href="/contact">
+            <Button className="pet-button w-full">
+              <Mail className="w-4 h-4 mr-2" /> Contact Us
+            </Button>
+          </a>
         </div>
       </div>
     </div>

@@ -29,7 +29,7 @@ const Products = () => {
             name: product.name,
             description: product.description,
             price: product.price,
-            imageUrl: product.image_url, // Map from image_url to imageUrl
+            image_url: product.image_url, // Map from image_url to imageUrl
             category: product.category,
           })) || [];
 

@@ -18,32 +18,44 @@ const Navbar = () => {
               </span>
             </Link>
           </div>
-          
+
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="font-medium text-gray-700 hover:text-petcare-purple transition-colors">
+            <Link
+              to="/"
+              className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
+            >
               Home
             </Link>
-            <Link to="/products" className="font-medium text-gray-700 hover:text-petcare-purple transition-colors">
+            <Link
+              to="/products"
+              className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
+            >
               Products
             </Link>
-            <Link to="/about" className="font-medium text-gray-700 hover:text-petcare-purple transition-colors">
+            <Link
+              to="/about"
+              className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
+            >
               About
             </Link>
-            <Link to="/contact" className="font-medium text-gray-700 hover:text-petcare-purple transition-colors">
+            <Link
+              to="/contact"
+              className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
+            >
               Contact
             </Link>
           </div>
 
           <div className="hidden md:flex items-center">
-            <Link to="/admin" className="font-medium text-sm text-gray-500 hover:text-petcare-purple transition-colors mr-4">
+            <Link
+              to="/admin"
+              className="font-medium text-sm text-gray-500 hover:text-petcare-purple transition-colors mr-4"
+            >
               Admin
             </Link>
-            <Button variant="ghost" className="rounded-full p-2">
-              <ShoppingCart className="h-5 w-5 text-gray-600" />
-            </Button>
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
@@ -64,36 +76,36 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-petcare-pink/20 hover:text-petcare-purple"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </Link>
-            <Link 
-              to="/products" 
+            <Link
+              to="/products"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-petcare-pink/20 hover:text-petcare-purple"
               onClick={() => setIsMenuOpen(false)}
             >
               Products
             </Link>
-            <Link 
-              to="/about" 
+            <Link
+              to="/about"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-petcare-pink/20 hover:text-petcare-purple"
               onClick={() => setIsMenuOpen(false)}
             >
               About
             </Link>
-            <Link 
-              to="/contact" 
+            <Link
+              to="/contact"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-petcare-pink/20 hover:text-petcare-purple"
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
             </Link>
-            <Link 
-              to="/admin" 
+            <Link
+              to="/admin"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-500 hover:bg-petcare-pink/20 hover:text-petcare-purple"
               onClick={() => setIsMenuOpen(false)}
             >
