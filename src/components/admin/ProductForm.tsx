@@ -80,7 +80,7 @@ const ProductForm = ({ product, onSubmit, onCancel }: ProductFormProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="price" className="block text-sm font-medium">
-            Price ($)
+            Price (Rs. )
           </label>
           <Input
             id="price"
