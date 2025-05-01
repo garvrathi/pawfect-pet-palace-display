@@ -1,3 +1,4 @@
+
 import { Heart, Mail, Phone, MapPin, Instagram } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -5,7 +6,7 @@ const Footer = () => {
   return (
     <footer className="bg-petcare-purple/5 border-t border-petcare-purple/10">
       <div className="section-container pt-12 pb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <h3 className="text-lg font-bold">Petcare4sure</h3>
             <p className="text-sm text-gray-600">
@@ -71,13 +72,15 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-bold">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-center space-x-3 text-sm text-gray-600">
-                <Phone
-                  size={18}
-                  className="flex-shrink-0 text-petcare-purple"
-                />
-                <span>+91 8287718294</span>
-                <span>+91 8700650039</span>
+              <li className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 text-sm text-gray-600">
+                <span className="flex items-center">
+                  <Phone
+                    size={18}
+                    className="flex-shrink-0 text-petcare-purple mr-2"
+                  />
+                  <span>+91 8287718294</span>
+                </span>
+                <span className="ml-6 sm:ml-0">+91 8700650039</span>
               </li>
               <li className="flex items-center space-x-3 text-sm text-gray-600">
                 <Mail size={18} className="flex-shrink-0 text-petcare-purple" />

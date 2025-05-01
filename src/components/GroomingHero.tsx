@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Scissors } from "lucide-react";
 
@@ -6,20 +7,20 @@ const GroomingHero = () => {
     <section className="bg-gradient-to-b from-petcare-pink/20 to-white pt-16 pb-12">
       <div className="section-container grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div className="order-2 lg:order-1">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-800">
+          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-6 text-gray-800">
             <span className="bg-gradient-to-r from-petcare-purple to-petcare-pink bg-clip-text text-transparent">
               Professional Pet Grooming
             </span>{" "}
             Services
           </h1>
-          <p className="text-lg text-gray-600 mb-8 max-w-xl">
+          <p className="text-base md:text-lg text-gray-600 mb-8 max-w-xl">
             Give your pets the pampering they deserve with our expert grooming
             services. From baths and haircuts to nail trimming and ear cleaning,
             we provide comprehensive care for all breeds.
           </p>
           <div className="flex flex-wrap gap-4">
             <a href="/contact">
-              <Button className="pet-button text-base px-8 py-6">
+              <Button className="pet-button text-base px-6 py-5 md:px-8 md:py-6">
                 Book Appointment
               </Button>
             </a>
