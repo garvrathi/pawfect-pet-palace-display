@@ -1,9 +1,10 @@
+
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail } from "lucide-react";
 
 export interface Product {
-  id: number;
+  id: string; // Changed from number to string to match Supabase UUID
   name: string;
   description: string;
   price: number;

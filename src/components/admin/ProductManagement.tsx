@@ -31,7 +31,7 @@ const ProductManagement = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   // Fetch products from Supabase
   const fetchProducts = async () => {
@@ -90,7 +90,7 @@ const ProductManagement = () => {
 
       setProducts(
         products.map((product) =>
-          product.id === productToEdit.id ? data : product,
+          product.id === productToEdit.id ? data as Product : product,
         ),
       );
       toast.success("Product updated successfully");
@@ -101,7 +101,7 @@ const ProductManagement = () => {
     }
   };
 
-  const handleDeleteProduct = async (id: number) => {
+  const handleDeleteProduct = async (id: string) => {
     setIsDeleting(id);
     try {
       const { error } = await supabase.from("products").delete().eq("id", id);
