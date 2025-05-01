@@ -18,6 +18,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
+        // Using Supabase client with anon key for public data access
         const { data, error } = await supabase.from("products").select("*");
 
         if (error) throw error;
@@ -29,7 +30,7 @@ const Products = () => {
             name: product.name,
             description: product.description,
             price: product.price,
-            image_url: product.image_url, // Map from image_url to imageUrl
+            image_url: product.image_url,
             category: product.category,
           })) || [];
 

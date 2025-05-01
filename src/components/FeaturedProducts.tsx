@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ const FeaturedProducts = () => {
     const fetchFeaturedProducts = async () => {
       try {
         setIsLoading(true);
+        // Using the anon key which allows public access to products
         const { data, error } = await supabase
           .from("products")
           .select("*")
@@ -27,7 +29,7 @@ const FeaturedProducts = () => {
             name: product.name,
             description: product.description,
             price: product.price,
-            image_url: product.image_url, // Map from image_url to imageUrl
+            image_url: product.image_url,
             category: product.category,
           })) || [];
 
