@@ -1,6 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { StarIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const GroomingTestimonials = () => {
   const testimonials = [
