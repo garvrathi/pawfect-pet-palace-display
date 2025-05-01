@@ -1,5 +1,6 @@
 
-import { Scissors, ShowerHead, Brush, Trim } from "lucide-react";
+
+import { Scissors, ShowerHead, Brush, Zap } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -20,7 +21,7 @@ const GroomingServices = () => {
     {
       title: "Nail Trimming",
       description: "Careful trimming of your pet's nails to keep them comfortable and prevent issues.",
-      icon: <Trim className="h-10 w-10 text-petcare-purple" />,
+      icon: <Zap className="h-10 w-10 text-petcare-purple" />,
       price: "Rs. 400 - 600",
     },
     {
@@ -73,3 +74,4 @@ const GroomingServices = () => {
 };
 
 export default GroomingServices;
+
