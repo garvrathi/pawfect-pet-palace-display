@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Bird, ShoppingCart } from "lucide-react";
@@ -32,6 +33,12 @@ const Navbar = () => {
               className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
             >
               Products
+            </Link>
+            <Link
+              to="/grooming"
+              className="font-medium text-gray-700 hover:text-petcare-purple transition-colors"
+            >
+              Grooming
             </Link>
             <Link
               to="/about"
@@ -89,6 +96,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Products
+            </Link>
+            <Link
+              to="/grooming"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-petcare-pink/20 hover:text-petcare-purple"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Grooming
             </Link>
             <Link
               to="/about"

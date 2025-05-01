@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Bone, Heart, Baby, Medal } from "lucide-react";
 
@@ -43,6 +44,7 @@ const Categories = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {categories.map((category, index) => (
             <div
+              key={index}
               className={`rounded-2xl ${category.color} p-6 h-full transition-transform duration-300 group-hover:-translate-y-2`}
             >
               <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mb-4 shadow-sm">
