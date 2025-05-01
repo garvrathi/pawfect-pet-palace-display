@@ -43,6 +43,14 @@ const Footer = () => {
               </li>
               <li>
                 <Link
+                  to="/grooming"
+                  className="hover:text-petcare-purple transition-colors"
+                >
+                  Grooming
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/about"
                   className="hover:text-petcare-purple transition-colors"
                 >
@@ -55,44 +63,6 @@ const Footer = () => {
                   className="hover:text-petcare-purple transition-colors"
                 >
                   Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold">Categories</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>
-                <Link
-                  to="/products/food"
-                  className="hover:text-petcare-purple transition-colors"
-                >
-                  Pet Food
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/toys"
-                  className="hover:text-petcare-purple transition-colors"
-                >
-                  Toys
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/accessories"
-                  className="hover:text-petcare-purple transition-colors"
-                >
-                  Accessories
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/products/health"
-                  className="hover:text-petcare-purple transition-colors"
-                >
-                  Health & Care
                 </Link>
               </li>
             </ul>
