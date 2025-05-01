@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Scissors } from "lucide-react";
 
@@ -14,17 +13,16 @@ const GroomingHero = () => {
             Services
           </h1>
           <p className="text-lg text-gray-600 mb-8 max-w-xl">
-            Give your pets the pampering they deserve with our expert grooming services. 
-            From baths and haircuts to nail trimming and ear cleaning, we provide 
-            comprehensive care for all breeds.
+            Give your pets the pampering they deserve with our expert grooming
+            services. From baths and haircuts to nail trimming and ear cleaning,
+            we provide comprehensive care for all breeds.
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button className="pet-button text-base px-8 py-6">
-              Book Appointment
-            </Button>
-            <Button variant="outline" className="text-base border-petcare-purple text-petcare-purple px-8 py-6">
-              View Services
-            </Button>
+            <a href="/contact">
+              <Button className="pet-button text-base px-8 py-6">
+                Book Appointment
+              </Button>
+            </a>
           </div>
         </div>
         <div className="order-1 lg:order-2">
