@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Bird, ShoppingCart } from "lucide-react";
@@ -13,7 +12,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
-              <Bird className="h-8 w-8 text-petcare-purple mr-2 animate-bounce-slow" />
+              <img
+                src="/logo.png"
+                alt="Petcare4sure Logo"
+                className="h-8 w-8 mr-2 animate-bounce-slow"
+              />
               <span className="font-display text-xl font-bold bg-gradient-to-r from-petcare-purple to-petcare-pink bg-clip-text text-transparent">
                 Petcare4sure
               </span>
